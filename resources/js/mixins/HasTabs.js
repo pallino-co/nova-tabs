@@ -72,13 +72,9 @@ export default {
 
     const tabs = this.tabs = this.setTabs();
     const routeTabs = parseLocationHash();
-    var currentTabSlug = routeTabs[this.getTabsReference()];
+    const currentTabSlug = routeTabs[this.getTabsReference()];
 
-    if(sessionStorage.hasOwnProperty(this.getTabsReference())){
-      currentTabSlug = sessionStorage.getItem(this.getTabsReference());
-    }
-
-    if (tabs[currentTabSlug] && this.hasVisibleFields(tabs[currentTabSlug])) {
+    if (tabs[currentTabSlug]) {
       this.handleTabClick(tabs[currentTabSlug])
     } else {
       this.handleTabClick(tabs[Object.keys(tabs)[0]], true);
@@ -132,29 +128,6 @@ export default {
   },
 
   methods: {
-    hasVisibleFields(tab) {
-      return tab.fields?.filter(e => e.visible).length > 0
-    },
-
-    fieldShown(e) {
-      Object.keys(this.tabs).forEach(key => {
-        this.tabs[key].fields.forEach(field => {
-          if (field.attribute == e) {
-            field.visible = true
-          }
-        })
-      })
-    },
-
-    fieldHidden(e) {
-      Object.keys(this.tabs).forEach(key => {
-        this.tabs[key].fields.forEach(field => {
-          if (field.attribute == e) {
-            field.visible = false
-          }
-        })
-      })
-    },
 
     /**
      * Set Tabs
@@ -243,7 +216,6 @@ export default {
     setLocationHash() {
       const routeTabs = parseLocationHash()
       routeTabs[this.getTabsReference()] = this.selectedTab.slug;
-      sessionStorage.setItem(this.getTabsReference(), this.selectedTab.slug)
       updateLocationHash(routeTabs)
     },
 
